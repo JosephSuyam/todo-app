@@ -32,14 +32,14 @@ export const addUser = async (req, res) => {
 
 export const updateUser = async (req, res) => {
   try {
-    const update_fields = {
+    const update_user = {
       first_name: req.body.first_name,
       last_name: req.body.last_name,
     };
 
-    if (req.body.password) update_fields.password = req.body.password;
+    if (req.body.password) update_user.password = req.body.password;
 
-    await Users.update(update_fields, {
+    await Users.update(update_user, {
       where: {
         id: req.user_id,
         status: UserStatus.ACTIVE,

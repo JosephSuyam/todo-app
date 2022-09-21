@@ -36,12 +36,17 @@ export const fetchTask = async (req, res) => {
 
 export const addTask = async (req, res) => {
   try {
-    await Tasks.create({
+    const task = {
       user_id: req.user_id,
-      ...req.body
-    });
+      title: req.body.title,
+      description: req.body.description ?? null,
+    };
 
-    return res.status(201).json({ message: 'Task added.' })
+    if (req.body.status) task.status = req.body.status;
+
+    await Tasks.create(task);
+
+    return res.status(201).json({ message: 'Task successfully added.' })
   } catch (error) {
     return res.status(500).json({ message: error });
   }
@@ -49,14 +54,21 @@ export const addTask = async (req, res) => {
 
 export const updateTask = async (req, res) => {
   try {
-    await Tasks.update(req.body, {
+    const update_task = {
+      title: req.body.title,
+      description: req.body.description ?? null,
+    };
+
+    if (req.body.status) update_task.status = req.body.status;
+
+    await Tasks.update(update_task, {
       where: {
         id: req.params.task_id,
         user_id: req.user_id,
       },
     });
 
-    return res.status(200).json({ message: "User Updated." });
+    return res.status(200).json({ message: "Task successfully updated." });
   } catch (error) {
     return res.status(500).json({ message: error });
   }
@@ -64,14 +76,20 @@ export const updateTask = async (req, res) => {
 
 export const setTaskStatus = async (req, res) => {
   try {
-    await Tasks.update(req.body, {
+    const status_update = {
+      status: req.body.status,
+    };
+
+    if (req.body.status === TaskStatus.COMPLETE) status_update.completed_at = 0;
+
+    await Tasks.update(status_update, {
       where: {
         id: req.params.task_id,
         user_id: req.user_id,
       },
     })
 
-    return res.status(200).json({ message: "User Deactivated." });
+    return res.status(200).json({ message: "Task status updated." });
   } catch (error) {
     return res.status(500).json({ message: err });
   }

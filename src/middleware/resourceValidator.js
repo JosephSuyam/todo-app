@@ -6,6 +6,6 @@ export default (resourceSchema) => async (req, res, next) => {
     next();
   } catch(e) {
     console.log('resourceValidator error', e);
-    res.status(400).send({ message: e.errors.join(', ') });
+    return res.status(400).json({ message: e.errors.join(', ').replace(/_/g, ' ') });
   }
 };

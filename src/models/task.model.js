@@ -1,5 +1,7 @@
 import { Sequelize, DataTypes } from "sequelize";
 import sequelize from "./index.js";
+import { TaskStatus } from "./enums/tasks.enum.js";
+import Users from "./user.model.js";
 
 const Tasks = sequelize.define('tasks', {
   id: {
@@ -11,6 +13,10 @@ const Tasks = sequelize.define('tasks', {
   user_id: {
     type: DataTypes.UUID,
     allowNull: false,
+    // references: {
+    //   model: Users,
+    //   key: 'id'
+    // },
   },
   title: {
     type: DataTypes.STRING,
@@ -33,5 +39,7 @@ const Tasks = sequelize.define('tasks', {
   createdAt: 'created_at',
   updatedAt: 'updated_at',
 });
+
+// Tasks.belongsTo(Users);
 
 export default Tasks;
