@@ -2,18 +2,24 @@ import jwt from 'jsonwebtoken';
 import Users from '../models/user.model.js';
 
 export const jwtAuth = async (req, res, next) => {
-  let token = req.headers['x-jwt-token'];
+  let token = req.headers['authorization'];
 
   if(!token)
-    return res.status(403).send({ message: "No token provided." });
+    return res.status(403).json({ message: "No token provided." });
 
-  verify(token, process.env.APP_SECRET, (err, decoded) => {
-    if(err)
-      return res.status(401).send({ message: "LMAO Unauthorized." });
+  token = token.replace("Bearer ", "");
 
-    req.userId = decoded.id;
-    req.permissions = decoded.permissions;
+  try {
+    const decoded = jwt.verify(token, process.env.APP_SECRET);
+
+    const user = await Users.findByPk(decoded.id)
+    if (!user) return res.status(404).json({ message: "User not found."});
+
+    req.user_id = decoded.id;
+    req.email = decoded.email;
 
     next();
-  });
+  } catch (error) {
+    return res.status(401).json({ message: "Unauthorized"});
+  }
 }

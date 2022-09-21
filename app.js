@@ -1,6 +1,8 @@
 import * as dotenv from "dotenv";
-import express, { json, urlencoded } from 'express';
+import express, { json, urlencoded, Router } from 'express';
 import cors from 'cors';
+import baseRouter from "./src/routes/base.route.js";
+import sequelize from './src/models/index.js';
 
 dotenv.config()
 const corsOptions = {
@@ -8,6 +10,7 @@ const corsOptions = {
 };
 const app = express();
 const PORT = parseInt(process.env.PORT, 10) || 3000;
+const router = Router();
 
 app.all('*', (req, res, next) => {
   res.set('Access-Control-Allow-Origin', '*');
@@ -21,14 +24,17 @@ app.all('*', (req, res, next) => {
 app.use(cors(corsOptions));
 app.use(json());
 app.use(urlencoded({ extended: true }));
-app.use('/api', baseRouter);
+app.use('/auth', authRouter);
+app.use('/users', jwtAuth, usersRouter);
+app.use('/tasks', jwtAuth, tasksRouter);
 
-sequelize.authenticate().then(() => {
+try {
+  sequelize.authenticate();
   console.log('Connection has been established successfully.');
   // Setup tables
-  sequelize.sync().then(() => { console.log('uWu it worked.') }).catch((e) => { console.log(e) }); // {force: true}
-}).catch((error) => {
+  sequelize.sync(); // {force: true}
+} catch (error) {
   console.error('Unable to connect to the database: ', error);
-});
+}
 
 app.listen(PORT, () => console.log(`Server running on port: ${PORT}.`));

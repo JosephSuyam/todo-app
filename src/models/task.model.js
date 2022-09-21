@@ -30,6 +30,8 @@ const Tasks = sequelize.define('tasks', {
 {
   underscored: true,
   timestamps: true,
+  createdAt: 'created_at',
+  updatedAt: 'updated_at',
 });
 
 export default Tasks;
