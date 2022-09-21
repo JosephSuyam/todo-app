@@ -1,7 +1,6 @@
 import { Sequelize, DataTypes } from "sequelize";
 import { genSaltSync, hashSync } from 'bcrypt';
 import sequelize from "./index.js";
-import Tasks from "./task.model.js";
 
 const Users = sequelize.define('users', {
   id: {
@@ -49,10 +48,6 @@ const Users = sequelize.define('users', {
       }
     },
   }
-});
-
-Users.hasMany(Tasks, {
-  foreignKey: 'user_id'
 });
 
 export default Users;

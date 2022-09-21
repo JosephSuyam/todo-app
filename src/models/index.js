@@ -13,6 +13,10 @@ const sequelize = new Sequelize(
       min: parseInt(process.env.POOL_MIN, 10) || 0,
       acquire: parseInt(process.env.POOL_ACQUIRE, 10) || 3600000, // max time(ms) in trying to get connection
       idle: parseInt(process.env.POOL_IDLE, 10) || 3600000,
+      retry: {
+        match: [Sequelize.ConnectionRefusedError],
+        max: 500
+      }
     },
   }
 );

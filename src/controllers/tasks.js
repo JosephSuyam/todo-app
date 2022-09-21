@@ -4,14 +4,34 @@ import { TaskStatus } from '../models/enums/tasks.enum.js';
 
 export const getTasks = async (req, res) => {
   try {
-    const tasks = await Tasks.findAll({
-      where: { user_id: req.user_id },
-      group: 'status',
+    const limit = req.query.limit ? parseInt(req.query.limit) : 10;
+    const offset = req.query.page ? parseInt(req.query.page) : 1;
+    let whereStatement = {};
+
+    if(req.query.status)
+      whereStatement.status = Object.values(TaskStatus).includes(req.query.status) ? req.query.status : TaskStatus.TODO;
+
+    if(req.query.search)
+      whereStatement.title = { [Op.like]: `%${req.query.search}%` };
+
+    const tasks = await Tasks.findAndCountAll({
+      limit,
+      offset,
+      where: whereStatement,
     });
 
-    console.log({tasks});
+    console.log({count: tasks.count, limit, 'page': Math.ceil(tasks.count / limit)});
 
-    return res.status(200).json(tasks ? tasks : { message: "Task List.", data: tasks });
+    const data = {
+      message: "Task List.",
+      total_count: tasks.count,
+      total_pages: Math.ceil(tasks.count / limit),
+      data: tasks.rows,
+    }
+
+    console.log(data)
+
+    return res.status(200).json(data);
   } catch (error) {
     return res.status(500).json({ message: error });
   }

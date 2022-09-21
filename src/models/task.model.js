@@ -13,10 +13,10 @@ const Tasks = sequelize.define('tasks', {
   user_id: {
     type: DataTypes.UUID,
     allowNull: false,
-    // references: {
-    //   model: Users,
-    //   key: 'id'
-    // },
+    references: {
+      model: Users,
+      key: 'id'
+    },
   },
   title: {
     type: DataTypes.STRING,
@@ -38,8 +38,12 @@ const Tasks = sequelize.define('tasks', {
   timestamps: true,
   createdAt: 'created_at',
   updatedAt: 'updated_at',
+  hooks: {
+    beforeBulkUpdate: (instance) => {
+      if (instance.attributes.status === TaskStatus.COMPLETE)
+        instance.attributes.completed_at = instance.attributes.updated_at;
+    },
+  }
 });
-
-// Tasks.belongsTo(Users);
 
 export default Tasks;
