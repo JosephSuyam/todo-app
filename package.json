@@ -4,9 +4,12 @@
   "description": "List for todo tasks",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha",
     "dev": "nodemon -r dotenv/config app.js -L"
   },
+  "keywords": [
+    "node.js"
+  ],
   "author": "Joseph Suyam",
   "license": "ISC",
   "type": "module",
@@ -22,6 +25,10 @@
     "yup": "^0.32.11"
   },
   "devDependencies": {
+    "casual": "^1.6.2",
+    "chai": "^4.3.6",
+    "chai-http": "^4.3.0",
+    "mocha": "^10.0.0",
     "nodemon": "^2.0.20"
   }
 }

@@ -44,11 +44,11 @@ export const fetchTask = async (req, res) => {
         id: req.params.task_id,
         user_id: req.user_id,
       }
-  });
+    });
 
     console.log(task);
 
-    return res.status(200).json({ message: "Task Info.", data: task });
+    return res.status(200).json({ message: "Task Details.", data: task });
   } catch (error) {
     return res.status(500).json({ message: error });
   }
@@ -56,17 +56,24 @@ export const fetchTask = async (req, res) => {
 
 export const addTask = async (req, res) => {
   try {
-    const task = {
+    const task = await Tasks.create({
       user_id: req.user_id,
       title: req.body.title,
       description: req.body.description ?? null,
+      status: req.body.status ?? TaskStatus.TODO,
+    });
+  
+    const message = 'Task successfully added.';
+    const data = {
+      id: task.id,
+      title: task.title,
+      description: task.description,
+      status: task.status,
+      created_at: task.created_at,
+      updated_at: task.updated_at
     };
 
-    if (req.body.status) task.status = req.body.status;
-
-    await Tasks.create(task);
-
-    return res.status(201).json({ message: 'Task successfully added.' })
+    return res.status(201).json({ message, data })
   } catch (error) {
     return res.status(500).json({ message: error });
   }
@@ -74,21 +81,34 @@ export const addTask = async (req, res) => {
 
 export const updateTask = async (req, res) => {
   try {
-    const update_task = {
-      title: req.body.title,
-      description: req.body.description ?? null,
-    };
-
-    if (req.body.status) update_task.status = req.body.status;
-
-    await Tasks.update(update_task, {
+    const task = await Tasks.findOne({
       where: {
         id: req.params.task_id,
         user_id: req.user_id,
-      },
+      }
     });
 
-    return res.status(200).json({ message: "Task successfully updated." });
+    if (!task) return res.status(404).json({ message: 'Task not found.' });
+  
+    task.title = req.body.title;
+    task.description = req.body.description ?? null;
+    if (req.body.password) task.password = req.body.password;
+  
+    if (req.body.status) task.status = req.body.status;
+  
+    await task.save();
+  
+    const message = 'Task successfully updated.';
+    const data = {
+      id: task.id,
+      title: task.title,
+      description: task.description,
+      status: task.status,
+      created_at: task.created_at,
+      updated_at: task.updated_at
+    };
+  
+    return res.status(200).json({ message, data });
   } catch (error) {
     return res.status(500).json({ message: error });
   }
