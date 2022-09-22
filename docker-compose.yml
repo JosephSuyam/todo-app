@@ -1,0 +1,15 @@
+version: "3.8"
+services:
+  todo_mysql:
+    image: mysql:8.0
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=ofyes
+      - MYSQL_DATABASE=db_basic
+    volumes:
+      - mysql_db_basic:/var/lib/mysql
+
+volumes:
+  mysql_db_basic:
+    driver: local
