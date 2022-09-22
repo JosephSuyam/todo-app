@@ -8,15 +8,15 @@ dotenv.config()
 chai.should();
 chai.use(chaiHttp);
 
-const email = 'uwuwu@wuwu.com';
-const password = 'uwuwu';
+const email = 'test@test.com';
+const password = 'testpwd';
 const user = {
     email: email,
     password: password,
     password_confirmation: password,
     first_name: casual.first_name,
     last_name: casual.last_name,
-}
+};
 let token;
 
 describe('Update and deactivate user', () => {
@@ -45,7 +45,7 @@ describe('Update and deactivate user', () => {
                     done();
                 })
         })
-    })
+    });
 
     describe('Deactivate User', () => {
         it('It should deactivate User.', (done) => {
@@ -59,5 +59,5 @@ describe('Update and deactivate user', () => {
                     done();
                 })
         })
-    })
-})
+    });
+});

@@ -8,12 +8,12 @@ dotenv.config()
 chai.should();
 chai.use(chaiHttp);
 
-const email = 'uwuwu@wuwu.com';
-const password = 'uwuwu';
+const email = 'test@test.com';
+const password = 'testpwd';
 const task = {
     title: casual.title,
     description: casual.description
-}
+};
 let token;
 let task_id;
 
@@ -123,4 +123,4 @@ describe('Task/Todo Management', () => {
                 })
         })
     });
-})
+});

@@ -10,15 +10,15 @@ chai.use(chaiHttp);
 
 // const email = casual.email;
 // const password = casual.password;
-const email = 'uwuwu@wuwu.com';
-const password = 'uwuwu';
+const email = 'test@test.com';
+const password = 'testpwd';
 const user = {
-    email: casual.email,
+    email: email,
     password: password,
     password_confirmation: password,
     first_name: casual.first_name,
     last_name: casual.last_name,
-}
+};
 
 describe('Authentication and registration', () => {
     describe('User Sign-up', () => {
@@ -40,7 +40,7 @@ describe('Authentication and registration', () => {
                     done();
                 })
         })
-    })
+    });
 
     describe('Validate email address', () => {
         it('It should validate email address.', (done) => {
@@ -54,7 +54,7 @@ describe('Authentication and registration', () => {
                     done();
                 })
         })
-    })
+    });
 
     describe('User login', () => {
         it('User should be able to login.', (done) => {
@@ -69,7 +69,7 @@ describe('Authentication and registration', () => {
                     done();
                 })
         })
-    })
+    });
 
     describe('User failed login', () => {
         it('User should be not able to login.', (done) => {
@@ -83,7 +83,7 @@ describe('Authentication and registration', () => {
                     done();
                 })
         })
-    })
+    });
 
     describe('User logout', () => {
         it('User should be able to logout.', (done) => {
@@ -96,5 +96,5 @@ describe('Authentication and registration', () => {
                     done();
                 })
         })
-    })
-})
+    });
+});
