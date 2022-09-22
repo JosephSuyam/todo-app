@@ -5,11 +5,11 @@ services:
     ports:
       - 3306:3306
     environment:
-      - MYSQL_ROOT_PASSWORD=ofyes
-      - MYSQL_DATABASE=db_basic
+      - MYSQL_ROOT_PASSWORD=dbpass
+      - MYSQL_DATABASE=todo_task_app
     volumes:
-      - mysql_db_basic:/var/lib/mysql
+      - todo_task_app:/var/lib/mysql
 
 volumes:
-  mysql_db_basic:
+  todo_task_app:
     driver: local
