@@ -19,7 +19,7 @@ const user = {
 };
 let token;
 
-describe('Update and deactivate user', () => {
+describe('Update user', () => {
     beforeEach((done) => {
         chai.request(app)
             .post("/api/auth/login")
@@ -42,20 +42,6 @@ describe('Update and deactivate user', () => {
                     res.body.should.be.a('object');
                     res.body.should.have.property('message').eql('User successfully updated.');
                     res.body.should.be.a('object');
-                    done();
-                })
-        })
-    });
-
-    describe('Deactivate User', () => {
-        it('It should deactivate User.', (done) => {
-            chai.request(app)
-                .delete('/api/users/deactivate-user')
-                .set({ "Authorization": `Bearer ${token}` })
-                .end((err, res) => {
-                    res.should.have.status(200);
-                    res.body.should.be.a('object');
-                    res.body.should.have.property('message').eql('User successfully deactivated.');
                     done();
                 })
         })
