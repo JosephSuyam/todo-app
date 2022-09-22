@@ -20,16 +20,12 @@ export const getTasks = async (req, res) => {
       where: whereStatement,
     });
 
-    console.log({count: tasks.count, limit, 'page': Math.ceil(tasks.count / limit)});
-
     const data = {
       message: "Task List.",
       total_count: tasks.count,
       total_pages: Math.ceil(tasks.count / limit),
       data: tasks.rows,
     }
-
-    console.log(data)
 
     return res.status(200).json(data);
   } catch (error) {
@@ -45,8 +41,6 @@ export const fetchTask = async (req, res) => {
         user_id: req.user_id,
       }
     });
-
-    console.log(task);
 
     return res.status(200).json({ message: "Task Details.", data: task });
   } catch (error) {

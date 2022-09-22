@@ -8,10 +8,8 @@ dotenv.config()
 chai.should();
 chai.use(chaiHttp);
 
-// const email = casual.email;
-// const password = casual.password;
-const email = 'test@test.com';
-const password = 'testpwd';
+const email = casual.email;
+const password = casual.password;
 const user = {
     email: email,
     password: password,

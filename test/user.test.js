@@ -8,8 +8,8 @@ dotenv.config()
 chai.should();
 chai.use(chaiHttp);
 
-const email = 'test@test.com';
-const password = 'testpwd';
+const email = casual.email;
+const password = casual.password;
 const user = {
     email: email,
     password: password,
@@ -19,8 +19,18 @@ const user = {
 };
 let token;
 
-describe('Update user', () => {
-    beforeEach((done) => {
+describe('Update and deactivate user', () => {
+    before((done) => {
+        chai.request(app)
+            .post("/api/auth/sign-up")
+            .send(user)
+            .end((err, res) => {
+                res.should.have.status(201);
+                done();
+            });
+    });
+
+    before((done) => {
         chai.request(app)
             .post("/api/auth/login")
             .send({ email, password })
@@ -42,6 +52,20 @@ describe('Update user', () => {
                     res.body.should.be.a('object');
                     res.body.should.have.property('message').eql('User successfully updated.');
                     res.body.should.be.a('object');
+                    done();
+                })
+        })
+    });
+
+    describe('Deactivate User', () => {
+        it('It should deactivate User.', (done) => {
+            chai.request(app)
+                .delete('/api/users/deactivate-user')
+                .set({ "Authorization": `Bearer ${token}` })
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('message').eql('User successfully deactivated.');
                     done();
                 })
         })

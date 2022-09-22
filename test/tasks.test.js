@@ -8,8 +8,15 @@ dotenv.config()
 chai.should();
 chai.use(chaiHttp);
 
-const email = 'test@test.com';
-const password = 'testpwd';
+const email = casual.email;
+const password = casual.password;
+const user = {
+    email: email,
+    password: password,
+    password_confirmation: password,
+    first_name: casual.first_name,
+    last_name: casual.last_name,
+};
 const task = {
     title: casual.title,
     description: casual.description
@@ -18,7 +25,17 @@ let token;
 let task_id;
 
 describe('Task/Todo Management', () => {
-    beforeEach((done) => {
+    before((done) => {
+        chai.request(app)
+            .post("/api/auth/sign-up")
+            .send(user)
+            .end((err, res) => {
+                res.should.have.status(201);
+                done();
+            });
+    });
+
+    before((done) => {
         chai.request(app)
             .post("/api/auth/login")
             .send({ email, password })
