@@ -9,7 +9,7 @@ const corsOptions = {
   origin: 'http://localhost:8081'
 };
 const app = express();
-const PORT = parseInt(process.env.PORT, 10) || 3000;
+const PORT = parseInt(process.env.PORT) || 3000;
 
 app.all('*', (req, res, next) => {
   res.set('Access-Control-Allow-Origin', '*');
