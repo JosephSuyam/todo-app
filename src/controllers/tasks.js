@@ -6,7 +6,9 @@ import { getPagination, getPagingData } from "../helpers/pagination.js";
 export const getTasks = async (req, res) => {
   try {
     const { limit, offset } = getPagination(req.query.page, req.query.limit);
-    let whereStatement = {};
+    let whereStatement = {
+      user_id: req.user_id,
+    };
 
     if(req.query.status)
       whereStatement.status = Object.values(TaskStatus).includes(req.query.status) ? req.query.status : TaskStatus.TODO;
