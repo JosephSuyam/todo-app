@@ -1,11 +1,11 @@
 import Op from "sequelize";
 import Tasks from '../models/task.model.js';
 import { TaskStatus } from '../models/enums/tasks.enum.js';
+import { getPagination, getPagingData } from "../helpers/pagination.js";
 
 export const getTasks = async (req, res) => {
   try {
-    const limit = req.query.limit ? parseInt(req.query.limit) : 10;
-    const offset = req.query.page ? parseInt(req.query.page) : 1;
+    const { limit, offset } = getPagination(req.query.page, req.query.limit);
     let whereStatement = {};
 
     if(req.query.status)
@@ -20,12 +20,7 @@ export const getTasks = async (req, res) => {
       where: whereStatement,
     });
 
-    const data = {
-      message: "Task List.",
-      total_count: tasks.count,
-      total_pages: Math.ceil(tasks.count / limit),
-      data: tasks.rows,
-    }
+    const data = getPagingData('Task List.', tasks, req.query.page, req.query.limit);
 
     return res.status(200).json(data);
   } catch (error) {
@@ -83,11 +78,10 @@ export const updateTask = async (req, res) => {
     });
 
     if (!task) return res.status(404).json({ message: 'Task not found.' });
-  
+
     task.title = req.body.title;
-    task.description = req.body.description ?? null;
+    if (req.body.description) task.description = req.body.description;
     if (req.body.password) task.password = req.body.password;
-  
     if (req.body.status) task.status = req.body.status;
   
     await task.save();

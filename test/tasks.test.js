@@ -105,6 +105,7 @@ describe('Task/Todo Management', () => {
                     res.body.should.be.a('object');
                     res.body.should.have.property('total_count');
                     res.body.should.have.property('total_pages');
+                    res.body.should.have.property('current_page');
                     res.body.data.should.be.a('array');
                     done();
                 })
